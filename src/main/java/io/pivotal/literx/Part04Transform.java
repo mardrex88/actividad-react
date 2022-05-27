@@ -14,22 +14,39 @@ public class Part04Transform {
 //========================================================================================
 
 	// TODO Capitalize the user username, firstname and lastname
+	// TODO Poner en mayúsculas el nombre de usuario, el nombre y el apellido
 	Mono<User> capitalizeOne(Mono<User> mono) {
-		return null;
+
+	Mono<User> result = mono.map(user ->
+				new User(user.getUsername().toUpperCase(),
+						user.getFirstname().toUpperCase(),
+						user.getLastname().toUpperCase()
+				));
+		return result;
 	}
 
 //========================================================================================
 
 	// TODO Capitalize the users username, firstName and lastName
+	// TODO Poner en mayúsculas el nombre de usuario, el nombre y el apellido
 	Flux<User> capitalizeMany(Flux<User> flux) {
-		return null;
+
+		Flux<User> result = flux.map(user ->
+				new User(user.getUsername().toUpperCase(),
+						user.getFirstname().toUpperCase(),
+						user.getLastname().toUpperCase())
+				);
+		return result;
 	}
 
 //========================================================================================
 
 	// TODO Capitalize the users username, firstName and lastName using #asyncCapitalizeUser
+	// TODO Poner en mayúsculas el nombre de usuario, el nombre y el apellido usando #asyncCapitalizeUser
 	Flux<User> asyncCapitalizeMany(Flux<User> flux) {
-		return null;
+
+		Flux<User> result = flux.flatMap(user -> asyncCapitalizeUser(user));
+		return result;
 	}
 
 	Mono<User> asyncCapitalizeUser(User u) {
