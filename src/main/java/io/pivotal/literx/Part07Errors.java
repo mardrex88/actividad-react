@@ -32,23 +32,39 @@ public class Part07Errors {
 //========================================================================================
 
 	// TODO Return a Mono<User> containing User.SAUL when an error occurs in the input Mono, else do not change the input Mono.
+	// TODO Devuelve un Mono<User> que contiene User.SAUL cuando se produce un error en el Mono de entrada, de lo contrario no cambia el Mono de entrada.
 	Mono<User> betterCallSaulForBogusMono(Mono<User> mono) {
-		return null;
+
+		Mono<User> result = mono.onErrorReturn(User.SAUL);
+		return result;
 	}
 
 //========================================================================================
 
 	// TODO Return a Flux<User> containing User.SAUL and User.JESSE when an error occurs in the input Flux, else do not change the input Flux.
+	// TODO Devuelve un Flux<User> que contiene User.SAUL y User.JESSE cuando se produce un error en el Flux de entrada, de lo contrario no cambia el Flux de entrada.
 	Flux<User> betterCallSaulAndJesseForBogusFlux(Flux<User> flux) {
-		return null;
+		Flux<User> result = flux.onErrorResume(e -> Flux.just(User.SAUL,User.JESSE));
+
+		return result;
 	}
 
 //========================================================================================
 
 	// TODO Implement a method that capitalizes each user of the incoming flux using the
 	// #capitalizeUser method and emits an error containing a GetOutOfHereException error
+	// TODO Implementar un método que ponga en mayúsculas a cada usuario del flujo de entrada utilizando el método
+	// método #capitalizeUser y emite un error que contiene una GetOutOfHereException
 	Flux<User> capitalizeMany(Flux<User> flux) {
-		return null;
+
+		Flux<User> result = flux.map(user -> {
+			try { return capitalizeUser(user);
+			}
+			catch (GetOutOfHereException error) {
+				throw Exceptions.propagate(error);
+			}});
+
+		return result;
 	}
 
 	User capitalizeUser(User user) throws GetOutOfHereException {

@@ -26,15 +26,27 @@ public class Part11BlockingToReactive {
 //========================================================================================
 
 	// TODO Create a Flux for reading all users from the blocking repository deferred until the flux is subscribed, and run it with an elastic scheduler
+	// TODO Crear un Flux para leer todos los usuarios del repositorio de bloqueo diferido hasta que se suscriba el flux, y ejecutarlo con un planificador elástico
+
 	Flux<User> blockingRepositoryToFlux(BlockingRepository<User> repository) {
-		return null;
+
+		Flux<User> result = Flux.defer(() ->
+						Flux.fromIterable(repository.findAll()))
+						.subscribeOn(Schedulers.elastic());
+		return result;
 	}
 
 //========================================================================================
 
 	// TODO Insert users contained in the Flux parameter in the blocking repository using an elastic scheduler and return a Mono<Void> that signal the end of the operation
+	// TODO Insertar los usuarios contenidos en el parámetro Flux en el repositorio de bloqueo utilizando un planificador elástico y devolver un Mono<Void> que señale el final de la operación
+
 	Mono<Void> fluxToBlockingRepository(Flux<User> flux, BlockingRepository<User> repository) {
-		return null;
+
+		Mono<Void> result = flux.publishOn(Schedulers.elastic())
+				.doOnNext(u -> repository.save(u))
+				.then();
+		return result;
 	}
 
 }
